@@ -1,24 +1,24 @@
 package com.myorg;
 
 import software.amazon.awscdk.core.App;
-import software.amazon.awscdk.core.Environment;
-import software.amazon.awscdk.core.StackProps;
 
 import java.util.Arrays;
 
 public class CursoAwsCdkApp {
+
     public static void main(final String[] args) {
         App app = new App();
 
-        final VpcStack vpc = new VpcStack(app, "Vpc");
+        VpcStack vpcStack = new VpcStack(app, "Vpc");
 
-        final ClusterStack cluster = new ClusterStack(app, "Cluster", vpc.getVpc());
-        cluster.addDependency(vpc);
+        ClusterStack clusterStack = new ClusterStack(app, "Cluster", vpcStack.getVpc());
+        clusterStack.addDependency(vpcStack);
 
-        RdsStack rdsStack = new RdsStack(app, "Rds", vpc.getVpc());
-        rdsStack.addDependency(vpc);
-        Service01Stack service01Stack = new Service01Stack(app, "Service01", cluster.getCluster());
-        service01Stack.addDependency(cluster);
+        RdsStack rdsStack = new RdsStack(app, "Rds", vpcStack.getVpc());
+        rdsStack.addDependency(vpcStack);
+
+        Service01Stack service01Stack = new Service01Stack(app, "Service01", clusterStack.getCluster());
+        service01Stack.addDependency(clusterStack);
         service01Stack.addDependency(rdsStack);
 
         app.synth();

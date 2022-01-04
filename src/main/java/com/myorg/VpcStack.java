@@ -18,7 +18,6 @@ public class VpcStack extends Stack {
         vpc = Vpc.Builder.create(this, "Vpc01")
                 .maxAzs(3)
                 .build();
-
     }
 
     public Vpc getVpc() {
