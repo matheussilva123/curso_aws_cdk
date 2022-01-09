@@ -2,8 +2,6 @@ package com.myorg;
 
 import software.amazon.awscdk.core.App;
 
-import java.util.Arrays;
-
 public class CursoAwsCdkApp {
 
     public static void main(final String[] args) {
@@ -23,10 +21,13 @@ public class CursoAwsCdkApp {
         service01Stack.addDependency(clusterStack);
         service01Stack.addDependency(rdsStack);
         service01Stack.addDependency(snsStack);
-        Service02Stack service02Stack = new Service02Stack(app, "Service02", clusterStack.getCluster(), snsStack.getProductEventsTopic());
+
+        DdbStack ddbStack = new DdbStack(app, "Dbd");
+        Service02Stack service02Stack = new Service02Stack(app, "Service02", clusterStack.getCluster()
+                , snsStack.getProductEventsTopic(), ddbStack.getProductEventsDdb());
         service02Stack.addDependency(clusterStack);
         service02Stack.addDependency(snsStack);
-
+        service02Stack.addDependency(ddbStack);
 
         app.synth();
     }
